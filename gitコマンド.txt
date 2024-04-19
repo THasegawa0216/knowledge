@@ -1,0 +1,70 @@
+git コマンド
+
+★事前準備
+gitをインストール
+ソース一式を格納したいフォルダを作成し、右クリックメニューから「Git Bash Here」
+
+■プロキシの設定変更が必要な場合、以下を実行
+export HTTPS_PROXY=http://xxxx.co.jp:xxxx
+export HTTP_PROXY=http://xxxx.co.jp:xxxx
+export http_proxy=http://xxxx.co.jp:xxxx
+export https_proxy=http://xxxx.co.jp:xxxx
+
+※以下のコマンドで記憶させることも可能
+git config --global http.proxy http://xxxx.co.jp:xxxx
+git config --global https.proxy http://xxxx.co.jp:xxxx
+
+
+■以下のコマンドを実行し、ソース一式を取得する
+※【branch名】部分はgitから取得したいブランチにすること
+※https://は開発元になるソースが格納されているgitのリポジトリのURL+「.git」
+
+git clone -b branch名 https://github.com/xxxxxxxxxxx/リポジトリ名.git
+例）git clone -b main https://github.com/THasegawa0216/knowledge.git
+
+
+■cloneが完了したら、必要に応じてcdコマンドでパスを移動
+cd sample
+
+■ローカルにブランチを作成（checkout -bでブランチの作成と切り替えを実施する）
+git checkout -b feature/sample-001
+
+■ローカルに作成したブランチをgithubに登録
+git push --set-upstream origin feature/sample-001
+
+■最新化(ローカルリポジトリの最新化＋マージ)
+git fetch origin master
+git merge origin/master
+もしくは以下でも可能。ただし作業中のブランチにpullする場合は、コンフリクトに注意。
+git pull origin master
+git pull origin feature/sample-001
+
+★fetchでエラーになって元に戻したい場合
+git reset --hard HEAD
+
+★pullでエラーになって元に戻したい場合
+git merge --abort
+git reset --hard HEAD
+
+■差分ファイルの追加
+git status -s
+
+■変更したファイルをコミットの対象として追加
+git add [ソースファイルパス]
+
+例）git add server/sample/sample1.ts
+
+★更新したファイルを全てaddしたい場合は以下のコマンドで実施可能
+git add .
+
+■ローカルリポジトリに更新内容をコミット
+git commit -m "変更履歴として残るコメントをここに記載"
+
+■ローカルリポジトリの更新を、githubにアップロード
+git push --force-with-lease
+
+■開発branchの内容を、テスト用ブランチ等に反映するため、プルリクエストを提出
+github画面でPull requestsを実施する
+
+PLに連絡し、ソースレビューやプルリクエストの承認を実施してもらう
+
