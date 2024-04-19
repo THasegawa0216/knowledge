@@ -4,6 +4,10 @@ git コマンド
 gitをインストール
 ソース一式を格納したいフォルダを作成し、右クリックメニューから「Git Bash Here」
 
+■（基本、初回のみ）gitのアカウント情報を保存
+git config --global user.name "THasegawa0216"
+git config --global user.email "XXXX@hogehoge.com"
+
 ■プロキシの設定変更が必要な場合、以下を実行
 export HTTPS_PROXY=http://xxxx.co.jp:xxxx
 export HTTP_PROXY=http://xxxx.co.jp:xxxx
