@@ -1,0 +1,49 @@
+■事前準備
+Docker Destopを起動
+コマンドプロンプトで開発用のフォルダへ移動
+
+■ビルドし、コンテナを起動
+docker build .
+docker images
+docker run -it [imageID] bash
+
+■DBTを実行したい場合はそのまま以下のコマンドを実施（全モデルを実行したい場合）
+dbt run --profiles-dir .
+
+■vscodeで編集して動作確認したい場合は以下のコマンドを実施してvscodeを起動
+ctrl + p + q
+code .
+
+■vscodeが起動するので、dockerのCONTAINERSから対象を右クリック。「Attach Visual Studio Code」でアタッチする。
+
+■別窓でvscodeが開くので、フォルダー(/user/app/)を開く
+
+■プロキシ環境の場合、vs codeのターミナルで以下のコマンドを実行し、proxyの設定を行う
+export HTTPS_PROXY=http://xxxxxxx.co.jp:xxxx
+export HTTP_PROXY=http://xxxxxxx.co.jp:xxxx
+export http_proxy=http://xxxxxxx.co.jp:xxxx
+export https_proxy=http://xxxxxxx.co.jp:xxxx
+
+★snowflakeでDBにアクセスする場合、ターミナルで以下を実施
+※設定値は各プロジェクトに応じて設定すること
+export SNOWFLAKE_ACCOUNT=
+export SNOWFLAKE_USER=
+export SNOWFLAKE_PASSWORD=
+export SNOWFLAKE_RAW_DATABASE=
+export SNOWFLAKE_DATABASE=
+export SNOWFLAKE_ROLE=
+export SNOWFLAKE_WAREHOUSE=
+
+
+■DBTのモデルを全実行したい場合
+dbt run --profiles-dir .
+
+■特定のモデルのみ実行したい場合
+dbt run --models <model name> --profiles-dir .
+
+※注意事項
+プロジェクトによると思うが、上記手順の場合、vscode上で編集した内容は実際のソースファイルには反映されない。
+そのため、編集して各モデルを実行して動作を確認して問題ないことが確認できたら、実際のソースファイルを別途テキストエディタ等で開き、変更内容を反映する。
+
+
+

@@ -1,0 +1,101 @@
+
+■事前準備
+Docker Destopを起動
+コマンドプロンプトで開発用のフォルダへ移動
+
+■Docker Desctopがうまく起動しない場合
+アプリを落とし、コマンドプロンプトで「wsl.exe --shutdown」を実施
+タスクマネージャでDockerのプロセスが全て終了していることを確認し、Docker Desctopを再度起動する
+
+
+■コマンドプロンプトで以下を実行し、コンテナを起動する
+docker-compose up -d
+code .
+
+■vscodeが起動するので、dockerのCONTAINERSから対象を右クリック。「Attach Visual Studio Code」でアタッチする。
+
+■別窓でvscodeが開くので、フォルダー(/user/src/)を開く。
+
+■プロキシ環境の場合、vs codeのターミナルで以下のコマンドを実行し、proxyの設定を行う
+npm -g config set proxy http://xxxxxxx.co.jp:xxxx
+npm -g config set https-proxy http://xxxxxxx.co.jp:xxxx
+npm -g config set registry http://registry.npmjs.org/
+
+export HTTPS_PROXY=http://xxxxxxx.co.jp:xxxx
+export HTTP_PROXY=http://xxxxxxx.co.jp:xxxx
+export http_proxy=http://xxxxxxx.co.jp:xxxx
+export https_proxy=http://xxxxxxx.co.jp:xxxx
+
+■（初回のみ）バックエンドアプリの依存関係をインストールする。
+※フォルダ構成によって異なるが、srcフォルダ直下に「client」と「server」が存在する構成を想定して記載する
+cd server
+npm install --save-dev --no-audit
+
+（古い依存関係を無視したい場合は以下　※非推奨）
+npm install --no-audit --save-dev --legacy-peer-deps
+
+（初回のみ）フロントエンドアプリの依存関係インストール
+cd ../
+cd client
+npm install --no-audit --save-dev --legacy-peer-deps
+
+
+■フロントエンド起動
+cd client
+npm run start:local
+
+※OpenSSLバージョンエラーが発生する場合は以下を実施
+export NODE_OPTIONS=--openssl-legacy-provider
+npm run start:local
+
+■バックエンド起動
+※別ターミナル、あるいは「ワークスペースを複製」してバックエンド用のフォルダを開き、ターミナルから実行
+※必要に応じてこちら側でも再度プロキシを設定した後、実施
+cd server
+npm run start:local
+
+
+
+※デバッグしたい場合、client及びserverフォルダ内にlaunch.jsonファイルが必要
+以下は設定例
+
+★client側の設定例(npm runで起動後に「F5」でchromeを起動)
+src/.vscode/launch.json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Chrome",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceRoot}/src",
+            "sourceMapPathOverrides": {
+                "webpack:///src/*": "${webRoot}/*"
+            }
+        }
+    ]
+}
+
+★server側の設定例(node.jsでnpm runで起動後に「F5」でプロセスにアタッチ)
+src/server/.vscode/launch.json
+{ 
+    "version": "0.2.0",
+     "configurations": 
+     [
+        {
+            "type": "node",
+            "request":"attach",
+            "name": "Launch",
+            "processId":"${command:PickProcess}",
+        }
+    ] 
+}
+
+※F5キー押下後、以下のようなプロセスを探して選択する
+node /usr/src/server/dist/main
+
+
+
+
+
