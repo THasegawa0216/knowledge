@@ -1,0 +1,20 @@
+■useStateについて
+・useStateで値を更新すると、再レンダリングされる
+・useStateの更新は非同期のため、即座に更新されない。
+　以下の例の場合、コンソールに出力される値は初回は0のまま、次回は10、という結果になる。
+　
+　例）
+　const [value, setValue] = useState(0);
+　
+　const sample = () => {
+　  setValue(value + 10);
+　  setValue(value + 20);
+　  console.log(value);
+　}
+・useStateで設定した値を即反映させたい場合、useStateに関数を渡す方法がある。
+　例）setValue((prev) => prev + 1);
+
+
+
+
+
